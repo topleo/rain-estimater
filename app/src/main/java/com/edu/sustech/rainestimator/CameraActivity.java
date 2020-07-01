@@ -18,12 +18,14 @@ package com.edu.sustech.rainestimator;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.room.Room;
 
 import com.edu.sustech.rainestimator.database.AppDatabase;
 
-public class CameraActivity extends Activity {
+public class CameraActivity extends FragmentActivity {
 
     private AppDatabase db;
     public static CameraActivity cameraActivity;
@@ -38,11 +40,13 @@ public class CameraActivity extends Activity {
                 AppDatabase.class, databaseName).build();
 
         setContentView(R.layout.activity_camera);
-        if (null == savedInstanceState) {
-            getFragmentManager().beginTransaction()
-                    .replace(R.id.container, Camera2VideoFragment.newInstance())
-                    .commit();
-        }
+//        if (null == savedInstanceState) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, Camera2VideoFragment.newInstance())
+                .addToBackStack(null)
+                .commit();
+//        }
     }
 
     public AppDatabase getDb(){

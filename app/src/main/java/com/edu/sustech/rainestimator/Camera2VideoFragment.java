@@ -20,8 +20,8 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -74,7 +74,9 @@ import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 public class Camera2VideoFragment extends Fragment
-        implements View.OnClickListener, FragmentCompat.OnRequestPermissionsResultCallback {
+        implements View.OnClickListener
+        , ActivityCompat.OnRequestPermissionsResultCallback
+{
 
     private static final int SENSOR_ORIENTATION_DEFAULT_DEGREES = 90;
     private static final int SENSOR_ORIENTATION_INVERSE_DEGREES = 270;
@@ -378,7 +380,6 @@ public class Camera2VideoFragment extends Fragment
         stopBackgroundThread();
         super.onPause();
     }
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
@@ -434,7 +435,7 @@ public class Camera2VideoFragment extends Fragment
      */
     private boolean shouldShowRequestPermissionRationale(String[] permissions) {
         for (String permission : permissions) {
-            if (FragmentCompat.shouldShowRequestPermissionRationale(this, permission)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permission)) {
                 return true;
             }
         }
@@ -448,8 +449,10 @@ public class Camera2VideoFragment extends Fragment
         if (shouldShowRequestPermissionRationale(VIDEO_PERMISSIONS)) {
             new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
         } else {
-            FragmentCompat.requestPermissions(this, VIDEO_PERMISSIONS, REQUEST_VIDEO_PERMISSIONS);
+            ActivityCompat.requestPermissions(getActivity(), VIDEO_PERMISSIONS, REQUEST_VIDEO_PERMISSIONS);
         }
+
+
     }
 
     @Override
@@ -864,7 +867,7 @@ public class Camera2VideoFragment extends Fragment
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            FragmentCompat.requestPermissions(parent, VIDEO_PERMISSIONS,
+                            ActivityCompat.requestPermissions(parent.getActivity(), VIDEO_PERMISSIONS,
                                     REQUEST_VIDEO_PERMISSIONS);
                         }
                     })
